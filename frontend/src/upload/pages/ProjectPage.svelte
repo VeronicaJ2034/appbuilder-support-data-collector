@@ -9,7 +9,7 @@
   import { upload } from "../state.svelte";
   import { formatBytes, formatDateTime } from "../format";
 
-  const UPLOAD_URL_PLACEHOLDER = "https://support.example.org/upload";
+  const UPLOAD_URL_PLACEHOLDER = "https://app.scriptoria.io/support/[id]";
   // Trusted static content; do not replace this with user-provided Markdown.
   const DISCLAIMER_MARKDOWN = `## About your project data
 
