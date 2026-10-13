@@ -9,6 +9,8 @@
   import { formatBytes, formatDateTime } from "../format";
 
   const UPLOAD_URL_PLACEHOLDER = "https://support.example.org/upload";
+  const DISCLAIMER_PLACEHOLDER =
+    "[PLACEHOLDER: Insert approved disclaimer wording here.]";
 
   let loading = $state(false);
   let error = $state("");
@@ -53,31 +55,40 @@
   }
 </script>
 
-<p class="mb-3">Upload support data for this project?</p>
+<div class="mb-5">
+  <h2 class="text-lg font-semibold">Upload Support Data?</h2>
+  <p class="mt-1 text-sm text-base-content/70">
+    Review the project information and upload location before continuing.
+  </p>
+</div>
 
-<div class="rounded-box border border-base-300 bg-base-200 p-4 text-sm">
+<section class="rounded-box border border-base-300 bg-base-200 p-4">
+  <h3 class="mb-3 text-sm font-semibold">Project Information</h3>
   {#if upload.project}
-    <dl class="grid grid-cols-[max-content_1fr] gap-x-8 gap-y-1">
+    <dl class="grid grid-cols-[max-content_1fr] gap-x-6 gap-y-2 text-sm">
       <dt class="text-base-content/70">Project Name</dt>
       <dd>{upload.project.name}</dd>
       <dt class="text-base-content/70">Folder</dt>
       <dd class="break-all">{upload.project.folder}</dd>
       <dt class="text-base-content/70">Last Modified</dt>
       <dd>{formatDateTime(upload.project.lastModified)}</dd>
-      <dt class="text-base-content/70">Folder Size</dt>
+      <dt class="text-base-content/70">Project Size</dt>
       <dd>{formatBytes(upload.project.folderSize)}</dd>
     </dl>
   {:else if loading}
-    <span class="dy-loading dy-loading-spinner dy-loading-sm"></span>
+    <div class="flex items-center gap-2 text-sm text-base-content/70">
+      <span class="dy-loading dy-loading-spinner dy-loading-sm"></span>
+      Loading project information…
+    </div>
   {:else}
     <div class="flex items-center justify-between gap-4">
-      <p class={error ? "text-error" : ""}>{error || "No project folder was given."}</p>
+      <p class={error ? "text-error" : "text-sm"}>{error || "No project folder was given."}</p>
       <button class="dy-btn dy-btn-sm" onclick={chooseFolder}>Choose Folder…</button>
     </div>
   {/if}
-</div>
+</section>
 
-<fieldset class="dy-fieldset mt-4">
+<fieldset class="dy-fieldset mt-5">
   <legend class="dy-fieldset-legend">Upload Location</legend>
   <!-- Kept at 16px: WKWebView zooms on focus for inputs smaller than that. -->
   <input
@@ -87,4 +98,9 @@
     placeholder={UPLOAD_URL_PLACEHOLDER}
     autocomplete="off"
   />
+</fieldset>
+
+<fieldset class="dy-fieldset mt-5">
+  <legend class="dy-fieldset-legend">Disclaimer</legend>
+  <textarea class="dy-textarea min-h-24 w-full text-base" readonly>{DISCLAIMER_PLACEHOLDER}</textarea>
 </fieldset>
