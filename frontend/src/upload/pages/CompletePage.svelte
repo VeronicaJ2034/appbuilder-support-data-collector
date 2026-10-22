@@ -24,7 +24,7 @@
     class="dy-textarea h-48 w-full font-mono text-sm leading-6"
     readonly
     aria-label={m.upload_progress_aria()}
-  >{`${m.preparing_project({ name: upload.project?.name ?? " project" })}
+  >{`${m.preparing_project({ name: upload.project?.name ?? "" })}
 ${m.filename_app_def()}
 ${m.filename_settings()}
 ${m.filename_database()}

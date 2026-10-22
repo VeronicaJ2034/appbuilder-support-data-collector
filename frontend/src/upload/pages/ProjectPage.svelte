@@ -100,7 +100,7 @@
     class="dy-input w-full text-base"
     type="url"
     bind:value={upload.uploadUrl}
-    placeholder={m.upload_url_placeholder()}
+    placeholder={UPLOAD_URL_PLACEHOLDER}
     autocomplete="off"
   />
 </fieldset>

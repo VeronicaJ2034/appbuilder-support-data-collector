@@ -59,6 +59,7 @@
     if (locales.includes(selected as (typeof locales)[number])) {
       const nextLocale = selected as (typeof locales)[number];
       setLocale(nextLocale, { reload: false });
+      document.documentElement.lang = nextLocale;
       locale = nextLocale;
     }
   }

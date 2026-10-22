@@ -28,6 +28,7 @@ export default defineConfig({
     paraglideVitePlugin({
       project: "./paraglide/default.inlang",
       outdir: "./src/lib/paraglide",
+      strategy: ["globalVariable", "baseLocale"],
     }),
     wails("./bindings"),
   ],
