@@ -1,5 +1,6 @@
 import type { WizardPageDef } from "../wizard/types";
 import ProjectPage from "./pages/ProjectPage.svelte";
+import SupportDataPage from "./pages/SupportDataPage.svelte";
 import UploadPage from "./pages/UploadPage.svelte";
 import CompletePage from "./pages/CompletePage.svelte";
 
@@ -10,6 +11,12 @@ export const pages: WizardPageDef[] = [
     title: "Project",
     subtitle: "Check the project and where its support data will be sent",
     component: ProjectPage,
+  },
+  {
+    id: "support-data",
+    title: "Support Data",
+    subtitle: "Choose which data to include in the upload",
+    component: SupportDataPage,
   },
   {
     id: "upload",

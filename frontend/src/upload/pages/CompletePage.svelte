@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getSupportDataItem } from "@sil/support-data";
   import { upload } from "../state.svelte";
 
   export function canBack(): boolean {
@@ -8,6 +9,10 @@
   export function canCancel(): boolean {
     return false;
   }
+
+  const selectedItemNames = $derived(
+    upload.selectedItems.map((id) => getSupportDataItem(id).displayName),
+  );
 </script>
 
 <div class="mb-5">
@@ -23,11 +28,10 @@
     class="dy-textarea h-48 w-full font-mono text-sm leading-6"
     readonly
     aria-label="Upload progress log"
-  >{`Preparing ${upload.project?.name ?? " project"}...
-appDef.json
-config/settings.json
-project/data/project.db
-project/images/icon.png
-support/logs/app.log
+  >{`Preparing ${upload.project?.name ?? "project"}...
+Selected support data:
+${selectedItemNames.map((name) => `- ${name}`).join("\n")}
+
+Only the selected support-data items will be collected.
 `}</textarea>
 </section>

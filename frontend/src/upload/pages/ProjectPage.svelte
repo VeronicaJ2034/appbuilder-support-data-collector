@@ -6,6 +6,10 @@
   import { Dialogs } from "@wailsio/runtime";
   import { marked } from "marked";
   import { ProjectService } from "../../../bindings/github.com/sillsdev/appbuilder-support-data-collector";
+  import {
+    createCollectionRequest,
+    type SupportDataItemId,
+  } from "@sil/support-data";
   import { upload } from "../state.svelte";
   import { formatBytes, formatDateTime } from "../format";
 
@@ -25,6 +29,11 @@ Before uploading, you'll be able to review the items selected for collection and
 
 You'll be able to review and change the selection before the data is uploaded.`;
   const disclaimerHtml = marked.parse(DISCLAIMER_MARKDOWN);
+  const REPRESENTATIVE_REQUESTED_ITEMS: SupportDataItemId[] = [
+    "project-config",
+    "project-content",
+    "build-diagnostics",
+  ];
 
   let loading = $state(false);
   let error = $state("");
@@ -66,6 +75,20 @@ You'll be able to review and change the selection before the data is uploaded.`;
 
   export function canNext(): boolean {
     return upload.project !== undefined && upload.uploadUrl.trim() !== "";
+  }
+
+  export function onNext(): boolean {
+    const supportUrl = upload.uploadUrl.trim();
+    const previousRequest = upload.collectionRequest;
+    upload.collectionRequest = createCollectionRequest(
+      "desktop-representative-request",
+      supportUrl,
+      REPRESENTATIVE_REQUESTED_ITEMS,
+    );
+    if (!previousRequest || previousRequest.supportUrl !== supportUrl) {
+      upload.selectedItems = [...REPRESENTATIVE_REQUESTED_ITEMS];
+    }
+    return true;
   }
 </script>
 
