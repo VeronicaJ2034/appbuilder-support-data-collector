@@ -53,6 +53,7 @@
   let pageSubtitle = $derived(
     typeof page.subtitle === "function" ? page.subtitle() : page.subtitle,
   );
+  let languageNames = $derived(new Intl.DisplayNames([locale], { type: "language" }));
 
   function changeLocale(event: Event): void {
     const selected = (event.currentTarget as HTMLSelectElement).value;
@@ -110,14 +111,9 @@
       <label class="flex items-center gap-2 text-sm">
         <span>{m.language()}</span>
         <select class="dy-select dy-select-sm" value={locale} onchange={changeLocale}>
-          <option value="en">English</option>
-          <option value="fr">Français</option>
-          <option value="es">Español</option>
-          <option value="pt-BR">Português (Brasil)</option>
-          <option value="ru">Русский</option>
-          <option value="vi">Tiếng Việt</option>
-          <option value="zh-CN">简体中文</option>
-          <option value="th">ไทย</option>
+          {#each locales as availableLocale}
+            <option value={availableLocale}>{languageNames.of(availableLocale)}</option>
+          {/each}
         </select>
       </label>
     </header>
