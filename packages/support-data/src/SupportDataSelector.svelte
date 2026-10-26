@@ -2,16 +2,42 @@
   import {
     SUPPORT_DATA_ITEMS,
     toggleSupportDataItem,
+    type SupportDataItem,
     type SupportDataItemId,
   } from "./index";
 
-  interface Props {
-    requestedItems?: readonly SupportDataItemId[];
-    selectedItems?: SupportDataItemId[];
+  export interface SupportDataSelectorStrings {
+    heading: string;
+    description: string;
+    requestedLabel: string;
+    sensitiveLabel: string;
+    selectedCount: (count: number) => string;
   }
 
-  let { requestedItems = [], selectedItems = $bindable([...requestedItems]) }: Props = $props();
+  export interface SupportDataSelectorProps {
+    availableItems?: readonly SupportDataItem[];
+    requestedItems?: readonly SupportDataItemId[];
+    selectedItems?: SupportDataItemId[];
+    strings?: Partial<SupportDataSelectorStrings>;
+  }
+
+  const defaultStrings: SupportDataSelectorStrings = {
+    heading: "Support data to include",
+    description:
+      "Select only the information you want to share. Requested items are recommendations, not permission to collect data.",
+    requestedLabel: "Requested",
+    sensitiveLabel: "Sensitive",
+    selectedCount: (count) => `${count} ${count === 1 ? "item" : "items"} selected.`,
+  };
+
+  let {
+    availableItems = SUPPORT_DATA_ITEMS,
+    requestedItems = [],
+    selectedItems = $bindable([...requestedItems]),
+    strings = {},
+  }: SupportDataSelectorProps = $props();
   const requested = $derived(new Set(requestedItems));
+  const localizedStrings = $derived({ ...defaultStrings, ...strings });
 
   function toggleItem(id: SupportDataItemId): void {
     selectedItems = toggleSupportDataItem(selectedItems, id);
@@ -20,15 +46,14 @@
 
 <section class="space-y-3" aria-labelledby="support-data-selection-heading">
   <div>
-    <h2 id="support-data-selection-heading" class="text-lg font-semibold">Support data to include</h2>
-    <p class="mt-1 text-sm text-base-content/70">
-      Select only the information you want to share. Requested items are recommendations, not
-      permission to collect data.
-    </p>
+    <h2 id="support-data-selection-heading" class="text-lg font-semibold">
+      {localizedStrings.heading}
+    </h2>
+    <p class="mt-1 text-sm text-base-content/70">{localizedStrings.description}</p>
   </div>
 
   <div class="space-y-2">
-    {#each SUPPORT_DATA_ITEMS as item (item.id)}
+    {#each availableItems as item (item.id)}
       {@const isSelected = selectedItems.includes(item.id)}
       <label class="flex cursor-pointer items-start gap-3 rounded-box border border-base-300 bg-base-100 p-3">
         <input
@@ -42,10 +67,14 @@
           <span class="flex flex-wrap items-center gap-2 font-medium">
             {item.displayName}
             {#if requested.has(item.id)}
-              <span class="dy-badge dy-badge-sm dy-badge-outline">Requested</span>
+              <span class="dy-badge dy-badge-sm dy-badge-outline">
+                {localizedStrings.requestedLabel}
+              </span>
             {/if}
             {#if item.sensitive}
-              <span class="dy-badge dy-badge-sm dy-badge-warning">Sensitive</span>
+              <span class="dy-badge dy-badge-sm dy-badge-warning">
+                {localizedStrings.sensitiveLabel}
+              </span>
             {/if}
           </span>
           <span class="mt-1 block text-sm text-base-content/70">{item.description}</span>
@@ -54,7 +83,5 @@
     {/each}
   </div>
 
-  <p class="text-sm text-base-content/70">
-    {selectedItems.length} {selectedItems.length === 1 ? "item" : "items"} selected.
-  </p>
+  <p class="text-sm text-base-content/70">{localizedStrings.selectedCount(selectedItems.length)}</p>
 </section>

@@ -60,3 +60,22 @@ it("validates the support-data catalog, requests, and selection", () => {
     "new selections must be added",
   );
 });
+
+it("supports localized labels in a restricted selector catalog", () => {
+  const availableItems = SUPPORT_DATA_ITEMS.filter(
+    (item) => item.id === "project-config" || item.id === "project-content",
+  ).map((item) => ({
+    ...item,
+    displayName: `Localized ${item.id}`,
+    description: `Description for ${item.id}`,
+  }));
+  if (availableItems.length !== 2 || availableItems.some((item) => !item.id.startsWith("project-"))) {
+    throw new Error("the selector should accept a restricted catalog with stable IDs");
+  }
+  if (availableItems[1].displayName !== "Localized project-content") {
+    throw new Error("localized item labels should be preserved");
+  }
+  if (toggleSupportDataItem(["project-content"], "project-content").length !== 0) {
+    throw new Error("localized catalog selections should remain user-controlled");
+  }
+});

@@ -34,3 +34,22 @@ by this catalog.
 Tailwind or DaisyUI CSS. Consumers must scan this package's Svelte files with
 Tailwind CSS 4 and provide DaisyUI 5. This application uses the `dy-` DaisyUI
 prefix, so the component follows that prefix for component classes.
+
+The selector accepts these optional props:
+
+- `availableItems`: the catalog of items to display. It defaults to
+  `SUPPORT_DATA_ITEMS`. Consumers can pass a subset, or localized copies of
+  catalog items with the same stable IDs, without changing request validation.
+- `requestedItems`: item IDs recommended by support. These are used as the
+  initial selection and are displayed as recommendations; they do not restrict
+  `availableItems` or grant permission to collect data.
+- `selectedItems`: the user's final selection, exposed with Svelte's
+  `bind:selectedItems` syntax. This selection is authoritative and can differ
+  from `requestedItems`.
+- `strings`: optional localized component text for the heading, description,
+  requested and sensitive labels, and a `selectedCount` function that handles
+  singular and plural forms. Defaults are provided for omitted strings.
+
+The shared package intentionally does not provide filenames, project-specific
+warnings, or wizard navigation. Consumers that need those details should keep
+them alongside their own project-specific item presentation and state.
