@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import { paraglideVitePlugin } from "@inlang/paraglide-js";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import wails from "@wailsio/runtime/plugins/vite";
 import { readFileSync } from "node:fs";
@@ -24,19 +25,16 @@ export default defineConfig({
     port: Number(process.env.WAILS_VITE_PORT) || 9245,
     strictPort: true,
   },
-  resolve: {
-    alias: [
-      {
-        find: "@sil/support-data/SupportDataSelector.svelte",
-        replacement: resolve(configDir, "../packages/support-data/src/SupportDataSelector.svelte"),
-      },
-      {
-        find: "@sil/support-data",
-        replacement: resolve(configDir, "../packages/support-data/src/index.ts"),
-      },
-    ],
-  },
-  plugins: [tailwindcss(), svelte(), wails("./bindings")],
+  plugins: [
+    tailwindcss(),
+    svelte(),
+    paraglideVitePlugin({
+      project: "./paraglide/default.inlang",
+      outdir: "./src/lib/paraglide",
+      strategy: ["globalVariable", "baseLocale"],
+    }),
+    wails("./bindings"),
+  ],
   define: {
     __WAILS_VERSION__: JSON.stringify(wailsVersion),
   },
