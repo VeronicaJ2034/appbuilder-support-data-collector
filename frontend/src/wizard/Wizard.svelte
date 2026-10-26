@@ -20,7 +20,6 @@
   }
 
   let { pages, onfinish, oncancel }: Props = $props();
-  let locale = $state(getLocale());
 
   /** Index of the nearest page from `start` (inclusive) moving by `step` that is shown, or -1. */
   function findShownPage(start: number, step: 1 | -1): number {
@@ -53,15 +52,12 @@
   let pageSubtitle = $derived(
     typeof page.subtitle === "function" ? page.subtitle() : page.subtitle,
   );
-  let languageNames = $derived(new Intl.DisplayNames([locale], { type: "language" }));
+  let languageNames = $derived(new Intl.DisplayNames([getLocale()], { type: "language" }));
 
   function changeLocale(event: Event): void {
     const selected = (event.currentTarget as HTMLSelectElement).value;
     if (locales.includes(selected as (typeof locales)[number])) {
-      const nextLocale = selected as (typeof locales)[number];
-      setLocale(nextLocale, { reload: false });
-      document.documentElement.lang = nextLocale;
-      locale = nextLocale;
+      setLocale(selected as (typeof locales)[number]);
     }
   }
 
@@ -99,37 +95,35 @@
   setWizard({ moveToNextPage: goNext });
 </script>
 
-{#key locale}
-  <div class="flex h-dvh flex-col bg-base-100">
-    <header class="flex items-start justify-between gap-4 border-b border-base-300 bg-base-200 px-4 py-3">
-      <div>
-        <h1 class="font-semibold">{pageTitle}</h1>
-        {#if pageSubtitle}
-          <p class="text-sm text-base-content/70">{pageSubtitle}</p>
-        {/if}
-      </div>
-      <label class="flex items-center gap-2 text-sm">
-        <span>{m.language()}</span>
-        <select class="dy-select dy-select-sm" value={locale} onchange={changeLocale}>
-          {#each locales as availableLocale}
-            <option value={availableLocale}>{languageNames.of(availableLocale)}</option>
-          {/each}
-        </select>
-      </label>
-    </header>
+<div class="flex h-dvh flex-col bg-base-100">
+  <header class="flex items-start justify-between gap-4 border-b border-base-300 bg-base-200 px-4 py-3">
+    <div>
+      <h1 class="font-semibold">{pageTitle}</h1>
+      {#if pageSubtitle}
+        <p class="text-sm text-base-content/70">{pageSubtitle}</p>
+      {/if}
+    </div>
+    <label class="flex items-center gap-2 text-sm">
+      <span>{m.language()}</span>
+      <select class="dy-select dy-select-sm" value={getLocale()} onchange={changeLocale}>
+        {#each locales as availableLocale}
+          <option value={availableLocale}>{languageNames.of(availableLocale)}</option>
+        {/each}
+      </select>
+    </label>
+  </header>
 
-    <main class="flex-1 overflow-y-auto px-6 py-5">
-      <!-- Changing the component recreates the page, so its setup code runs each time it is shown. -->
-      <page.component bind:this={hooks} />
-    </main>
+  <main class="flex-1 overflow-y-auto px-6 py-5">
+    <!-- Changing the component recreates the page, so its setup code runs each time it is shown. -->
+    <page.component bind:this={hooks} />
+  </main>
 
-    <footer class="flex justify-end gap-2 px-4 py-3">
-      <button class="dy-btn dy-btn-sm" disabled={!canBack} onclick={onBackClick}>{m.back()}</button>
-      <button class="dy-btn dy-btn-sm dy-btn-primary" disabled={!canNext} onclick={onNextClick}>
-        {#if busy}<span class="dy-loading dy-loading-spinner dy-loading-xs"></span>{/if}
-        {nextCaption}
-      </button>
-      <button class="dy-btn dy-btn-sm" disabled={!canCancel} onclick={onCancelClick}>{m.cancel()}</button>
-    </footer>
-  </div>
-{/key}
+  <footer class="flex justify-end gap-2 px-4 py-3">
+    <button class="dy-btn dy-btn-sm" disabled={!canBack} onclick={onBackClick}>{m.back()}</button>
+    <button class="dy-btn dy-btn-sm dy-btn-primary" disabled={!canNext} onclick={onNextClick}>
+      {#if busy}<span class="dy-loading dy-loading-spinner dy-loading-xs"></span>{/if}
+      {nextCaption}
+    </button>
+    <button class="dy-btn dy-btn-sm" disabled={!canCancel} onclick={onCancelClick}>{m.cancel()}</button>
+  </footer>
+</div>

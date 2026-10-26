@@ -12,7 +12,7 @@
 
   const UPLOAD_URL_PLACEHOLDER = "https://app.scriptoria.io/support/[id]";
   // Trusted static content; do not replace this with user-provided Markdown.
-  const disclaimerHtml = marked.parse(m.disclaimer_markdown());
+  const disclaimerHtml = $derived(marked.parse(m.disclaimer_markdown()));
 
   let loading = $state(false);
   let error = $state("");
