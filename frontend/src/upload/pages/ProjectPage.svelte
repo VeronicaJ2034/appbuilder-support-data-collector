@@ -15,6 +15,11 @@
   import { m } from "../../lib/paraglide/messages.js";
 
   const UPLOAD_URL_PLACEHOLDER = "https://app.scriptoria.io/support/[id]";
+  const REPRESENTATIVE_REQUESTED_ITEMS: SupportDataItemId[] = [
+    "project-config",
+    "project-content",
+    "build-diagnostics",
+  ];
   // Trusted static content; do not replace this with user-provided Markdown.
   const disclaimerHtml = $derived(marked.parse(m.disclaimer_markdown()));
 

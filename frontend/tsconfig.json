@@ -33,5 +33,5 @@
     "../packages/support-data/src/**/*.test.ts",
     "src/paraglide/**",
     "src/lib/paraglide/**"
-  ],
+  ]
 }
