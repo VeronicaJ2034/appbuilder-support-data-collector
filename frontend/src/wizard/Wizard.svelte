@@ -103,8 +103,8 @@
         <p class="text-sm text-base-content/70">{pageSubtitle}</p>
       {/if}
     </div>
-    <label class="flex items-center gap-2 text-sm">
-      <span>{m.language()}</span>
+    <label class="flex shrink-0 items-center gap-2 text-sm">
+      <span class="whitespace-nowrap">{m.language()}</span>
       <select class="dy-select dy-select-sm" value={getLocale()} onchange={changeLocale}>
         {#each locales as availableLocale}
           <option value={availableLocale}>{languageNames.of(availableLocale)}</option>
