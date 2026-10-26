@@ -9,7 +9,8 @@
     "build:dev": "vite build --minify false --mode development",
     "build": "vite build --mode production",
     "preview": "vite preview",
-    "check": "npm run paraglide:compile && svelte-check --tsconfig ./tsconfig.json"
+    "check": "npm run paraglide:compile && svelte-check --tsconfig ./tsconfig.json",
+    "test:support-data": "vitest run --root .. packages/support-data/src/index.test.ts"
   },
   "dependencies": {
     "@wailsio/runtime": "^3.0.0",
