@@ -12,6 +12,8 @@
     requestedLabel: string;
     sensitiveLabel: string;
     selectedCount: (count: number) => string;
+    itemName: (item: SupportDataItem) => string;
+    itemDescription: (item: SupportDataItem) => string;
   }
 
   export interface SupportDataSelectorProps {
@@ -28,6 +30,8 @@
     requestedLabel: "Requested",
     sensitiveLabel: "Sensitive",
     selectedCount: (count) => `${count} ${count === 1 ? "item" : "items"} selected.`,
+    itemName: (item) => item.displayName,
+    itemDescription: (item) => item.description,
   };
 
   let {
@@ -61,11 +65,11 @@
           type="checkbox"
           checked={isSelected}
           onchange={() => toggleItem(item.id)}
-          aria-label={item.displayName}
+          aria-label={localizedStrings.itemName(item)}
         />
         <span class="min-w-0 flex-1">
           <span class="flex flex-wrap items-center gap-2 font-medium">
-            {item.displayName}
+            {localizedStrings.itemName(item)}
             {#if requested.has(item.id)}
               <span class="dy-badge dy-badge-sm dy-badge-outline">
                 {localizedStrings.requestedLabel}
@@ -77,7 +81,9 @@
               </span>
             {/if}
           </span>
-          <span class="mt-1 block text-sm text-base-content/70">{item.description}</span>
+          <span class="mt-1 block text-sm text-base-content/70"
+            >{localizedStrings.itemDescription(item)}</span
+          >
         </span>
       </label>
     {/each}

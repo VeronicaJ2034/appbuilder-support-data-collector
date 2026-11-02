@@ -15,8 +15,8 @@ export const pages: WizardPageDef[] = [
   },
   {
     id: "support-data",
-    title: "Support Data",
-    subtitle: "Choose which data to include in the upload",
+    title: () => m.support_data_page_title(),
+    subtitle: () => m.support_data_page_subtitle(),
     component: SupportDataPage,
   },
   {
